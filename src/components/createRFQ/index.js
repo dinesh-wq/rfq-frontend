@@ -9,6 +9,7 @@ const CreateRFQ = () => {
         rfq_name: '',
         bid_start_time: '',
         bid_close_time: '',
+        extension_duration_minutes: '5',
     });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
@@ -42,6 +43,7 @@ const CreateRFQ = () => {
                 rfq_name: '',
                 bid_start_time: '',
                 bid_close_time: '',
+                extension_duration_minutes: '5',
             });
 
         } catch (err) {
@@ -89,6 +91,18 @@ const CreateRFQ = () => {
                             required 
                         />
                     </div>
+                </div>
+
+                <div className="input-field">
+                    <label>Extension Time (minutes)</label>
+                    <input
+                        type="number"
+                        min="1"
+                        name="extension_duration_minutes"
+                        value={data.extension_duration_minutes}
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
 
                 <button type="submit" className="create-btn" disabled={loading}>
