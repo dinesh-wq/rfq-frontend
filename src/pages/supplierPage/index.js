@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './index.css';
@@ -6,6 +7,7 @@ import socket from '../../socket';
 import { API_BASE_URL } from '../../config';
 
 const SupplierDashboard = () => {
+    const navigate = useNavigate();
     const [rfqs, setRfqs] = useState([]);
     const [bidForms, setBidForms] = useState({});
     const [loading, setLoading] = useState(true);
@@ -111,6 +113,12 @@ const SupplierDashboard = () => {
                     <h2>Supplier Portal</h2>
                     <p>Review active requests and place your best bids.</p>
                 </div>
+                <button
+                    className="tab-btn"
+                    onClick={() => navigate('/')}
+                >
+                    Back
+                </button>
             </header>
 
             {error && <div className="error-banner">{error}</div>}

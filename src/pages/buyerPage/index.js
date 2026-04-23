@@ -1,4 +1,5 @@
 import React, { useState, Suspense, lazy } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './index.css';
 
 const ViewRFQs = lazy(() => import('../../components/viewRFQ'));
@@ -6,6 +7,7 @@ const CreateRFQ = lazy(() => import('../../components/createRFQ'));
 
 const BuyerDashboard = () => {
     const [activeTab, setActiveTab] = useState('view');
+    const navigate = useNavigate();
 
     return (
         <div className="dashboard-container">
@@ -15,6 +17,12 @@ const BuyerDashboard = () => {
                     <p>Manage your RFQs and track active auctions.</p>
                 </div>
                 <div className="tab-navigation">
+                    <button
+                        className="tab-btn"
+                        onClick={() => navigate('/')}
+                    >
+                        Back
+                    </button>
                     <button 
                         className={`tab-btn ${activeTab === 'view' ? 'active' : ''}`}
                         onClick={() => setActiveTab('view')}
