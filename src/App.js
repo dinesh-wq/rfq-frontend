@@ -2,6 +2,7 @@ import './App.css'
 import { useState, Suspense, lazy } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Cookies from 'js-cookie'
+import { API_BASE_URL } from './config'
 
 const HomePage = lazy(() => import('./pages/homePage'))
 
@@ -110,7 +111,7 @@ const SignupPage = ({
 }
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(Cookies.get('token')));
   const [authRoute, setAuthRoute] = useState('login')
 
   const toggleAuthRoute = () => {
@@ -128,7 +129,7 @@ const App = () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault()
     try {
-      const result = await fetch('http://localhost:3001/auth/login', {
+      const result = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -155,7 +156,7 @@ const App = () => {
   const handleSignupSubmit = async (e) => {
     e.preventDefault()
     try {
-      const result = await fetch('http://localhost:3001/auth/signup', {
+      const result = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

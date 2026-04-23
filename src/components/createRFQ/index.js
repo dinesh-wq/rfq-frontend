@@ -2,13 +2,19 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import './index.css';
+import { API_BASE_URL } from '../../config';
 
 const CreateRFQ = () => {
     const [data, setData] = useState({
         rfq_name: '',
+        reference_id: '',
         bid_start_time: '',
         bid_close_time: '',
-        extension_time: ''
+        forced_bid_close_time: '',
+        pickup_service_date: '',
+        trigger_window_minutes: '10',
+        extension_duration_minutes: '5',
+        extension_trigger: 'bid_received_last_x',
     });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
@@ -26,7 +32,7 @@ const CreateRFQ = () => {
 
         try {
             const res = await axios.post(
-                'http://localhost:3001/rfq/create',
+                `${API_BASE_URL}/rfq/create`,
                 data,
                 {
                     headers: {
@@ -40,9 +46,14 @@ const CreateRFQ = () => {
             // Optional: reset form
             setData({
                 rfq_name: '',
+                reference_id: '',
                 bid_start_time: '',
                 bid_close_time: '',
-                extension_time: ''
+                forced_bid_close_time: '',
+                pickup_service_date: '',
+                trigger_window_minutes: '10',
+                extension_duration_minutes: '5',
+                extension_trigger: 'bid_received_last_x',
             });
 
         } catch (err) {
@@ -66,6 +77,15 @@ const CreateRFQ = () => {
                         placeholder="e.g. June Logistics Auction" 
                         onChange={handleChange} 
                         required 
+                    />
+                </div>
+                <div className="input-field">
+                    <label>RFQ Reference ID (optional)</label>
+                    <input
+                        name="reference_id"
+                        value={data.reference_id}
+                        placeholder="e.g. RFQ-LOG-2026-04"
+                        onChange={handleChange}
                     />
                 </div>
 
@@ -93,16 +113,66 @@ const CreateRFQ = () => {
                     </div>
                 </div>
 
+                <div className="form-grid">
+                    <div className="input-field">
+                        <label>Forced Close Time</label>
+                        <input
+                            type="datetime-local"
+                            name="forced_bid_close_time"
+                            value={data.forced_bid_close_time}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-field">
+                        <label>Pickup / Service Date</label>
+                        <input
+                            type="date"
+                            name="pickup_service_date"
+                            value={data.pickup_service_date}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                </div>
+
+                <div className="form-grid">
+                    <div className="input-field">
+                        <label>Trigger Window (X minutes)</label>
+                        <input
+                            type="number"
+                            min="1"
+                            name="trigger_window_minutes"
+                            value={data.trigger_window_minutes}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                    <div className="input-field">
+                        <label>Extension Duration (Y minutes)</label>
+                        <input
+                            type="number"
+                            min="1"
+                            name="extension_duration_minutes"
+                            value={data.extension_duration_minutes}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+                </div>
+
                 <div className="input-field">
-                    <label>Extension window (minutes)</label>
-                    <input
-                        type="number"
-                        name="extension_time"
-                        value={data.extension_time}
-                        placeholder="e.g. 5"
+                    <label>Extension Trigger</label>
+                    <select
+                        name="extension_trigger"
+                        value={data.extension_trigger}
                         onChange={handleChange}
                         required
-                    />
+                    >
+                        <option value="bid_received_last_x">Bid received in last X minutes</option>
+                        <option value="any_rank_change_last_x">Any supplier rank change in last X minutes</option>
+                        <option value="l1_rank_change_last_x">Lowest bidder (L1) rank change in last X minutes</option>
+                    </select>
                 </div>
 
                 <button type="submit" className="create-btn" disabled={loading}>

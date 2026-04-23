@@ -1,5 +1,8 @@
 import { io } from 'socket.io-client';
+import { SOCKET_URL } from './config';
 
-const socket = io('http://localhost:3001');
+const socket = io(SOCKET_URL, {
+  transports: ['websocket', 'polling'],
+});
 
 export default socket;

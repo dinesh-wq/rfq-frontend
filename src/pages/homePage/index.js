@@ -1,6 +1,8 @@
 import './index.css'
 import { Routes, Route, Link } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
+import Cookies from 'js-cookie';
+import { jwtDecode } from 'jwt-decode'
 
 const BuyerPage = lazy(() => import('../buyerPage/index.js'))
 const SupplierPage = lazy(() => import('../supplierPage/index.js'))
@@ -24,12 +26,14 @@ const HomeMenu = () => {
 }
 
 const HomePage = ({ setIsLoggedIn }) => {
+    const token = Cookies.get('token');
+    const userName = jwtDecode(token).name;
     return (
         <div className='homepage-container'>
             <nav className='navbar'>
                 <p className='nav-brand'>British RFQ System</p>
                 <p className='welcome-user' onClick={() => setIsLoggedIn(false)} style={{ cursor: 'pointer' }}>
-                    Welcome User (Logout)
+                    Welcome {userName} (Logout)
                 </p>
             </nav>
             <Suspense fallback={<div className="loading-state">Loading portal...</div>}>
