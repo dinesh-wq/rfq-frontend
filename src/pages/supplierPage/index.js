@@ -104,6 +104,24 @@ const SupplierDashboard = () => {
         }
     };
 
+    const deleteRFQ = async (rfqId) => {
+        const shouldDelete = window.confirm('Are you sure you want to delete this RFQ?');
+        if (!shouldDelete) return;
+
+        try {
+            const token = Cookies.get('token');
+            await axios.delete(`${API_BASE_URL}/rfq/${rfqId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            alert('RFQ deleted successfully');
+            fetchRFQs();
+        } catch (err) {
+            alert(err.response?.data?.message || 'Unable to delete RFQ');
+        }
+    };
+
     if (loading) return <div className="loading-state">Fetching available RFQs...</div>;
 
     return (
@@ -169,6 +187,13 @@ const SupplierDashboard = () => {
                                     className="place-bid-btn"
                                 >
                                     {placingBid === rfq.id ? 'Placing...' : 'Submit Bid'}
+                                </button>
+                                <button
+                                    onClick={() => deleteRFQ(rfq.id)}
+                                    className="place-bid-btn"
+                                    style={{ backgroundColor: '#ef4444' }}
+                                >
+                                    Delete RFQ
                                 </button>
                             </div>
                         </div>

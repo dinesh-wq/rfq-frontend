@@ -39,6 +39,11 @@ const LoginPage = ({
           />
           <button type="submit" className='submit-button'>Login</button>
         </form>
+        <div className="login-hint-box">
+          <p className="login-hint-title">Demo Credentials</p>
+          <p>Username: <strong>dinesh</strong></p>
+          <p>Password: <strong>Dinesh123@</strong></p>
+        </div>
         <p className='auth-switch-text'>
           Don't have an account? <span className="toggle-auth-text" onClick={toggleAuthRoute}>Sign Up</span>
         </p>
