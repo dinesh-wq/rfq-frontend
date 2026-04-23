@@ -7,14 +7,8 @@ import { API_BASE_URL } from '../../config';
 const CreateRFQ = () => {
     const [data, setData] = useState({
         rfq_name: '',
-        reference_id: '',
         bid_start_time: '',
         bid_close_time: '',
-        forced_bid_close_time: '',
-        pickup_service_date: '',
-        trigger_window_minutes: '10',
-        extension_duration_minutes: '5',
-        extension_trigger: 'bid_received_last_x',
     });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState({ text: '', type: '' });
@@ -46,14 +40,8 @@ const CreateRFQ = () => {
             // Optional: reset form
             setData({
                 rfq_name: '',
-                reference_id: '',
                 bid_start_time: '',
                 bid_close_time: '',
-                forced_bid_close_time: '',
-                pickup_service_date: '',
-                trigger_window_minutes: '10',
-                extension_duration_minutes: '5',
-                extension_trigger: 'bid_received_last_x',
             });
 
         } catch (err) {
@@ -79,16 +67,6 @@ const CreateRFQ = () => {
                         required 
                     />
                 </div>
-                <div className="input-field">
-                    <label>RFQ Reference ID (optional)</label>
-                    <input
-                        name="reference_id"
-                        value={data.reference_id}
-                        placeholder="e.g. RFQ-LOG-2026-04"
-                        onChange={handleChange}
-                    />
-                </div>
-
                 <div className="form-grid">
                     <div className="input-field">
                         <label>Start Time</label>
@@ -111,68 +89,6 @@ const CreateRFQ = () => {
                             required 
                         />
                     </div>
-                </div>
-
-                <div className="form-grid">
-                    <div className="input-field">
-                        <label>Forced Close Time</label>
-                        <input
-                            type="datetime-local"
-                            name="forced_bid_close_time"
-                            value={data.forced_bid_close_time}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label>Pickup / Service Date</label>
-                        <input
-                            type="date"
-                            name="pickup_service_date"
-                            value={data.pickup_service_date}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="form-grid">
-                    <div className="input-field">
-                        <label>Trigger Window (X minutes)</label>
-                        <input
-                            type="number"
-                            min="1"
-                            name="trigger_window_minutes"
-                            value={data.trigger_window_minutes}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                    <div className="input-field">
-                        <label>Extension Duration (Y minutes)</label>
-                        <input
-                            type="number"
-                            min="1"
-                            name="extension_duration_minutes"
-                            value={data.extension_duration_minutes}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div className="input-field">
-                    <label>Extension Trigger</label>
-                    <select
-                        name="extension_trigger"
-                        value={data.extension_trigger}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="bid_received_last_x">Bid received in last X minutes</option>
-                        <option value="any_rank_change_last_x">Any supplier rank change in last X minutes</option>
-                        <option value="l1_rank_change_last_x">Lowest bidder (L1) rank change in last X minutes</option>
-                    </select>
                 </div>
 
                 <button type="submit" className="create-btn" disabled={loading}>
