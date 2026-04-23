@@ -9,6 +9,7 @@ const CreateRFQ = () => {
         rfq_name: '',
         bid_start_time: '',
         bid_close_time: '',
+        quotation_price: '',
         extension_duration_minutes: '5',
     });
     const [loading, setLoading] = useState(false);
@@ -43,6 +44,7 @@ const CreateRFQ = () => {
                 rfq_name: '',
                 bid_start_time: '',
                 bid_close_time: '',
+                quotation_price: '',
                 extension_duration_minutes: '5',
             });
 
@@ -91,6 +93,19 @@ const CreateRFQ = () => {
                             required 
                         />
                     </div>
+                </div>
+
+                <div className="input-field">
+                    <label>Quotation Price</label>
+                    <input
+                        type="number"
+                        min="1"
+                        name="quotation_price"
+                        value={data.quotation_price}
+                        placeholder="Enter maximum quotation amount"
+                        onChange={handleChange}
+                        required
+                    />
                 </div>
 
                 <div className="input-field">

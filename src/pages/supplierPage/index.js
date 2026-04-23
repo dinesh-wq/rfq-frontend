@@ -58,12 +58,6 @@ const SupplierDashboard = () => {
         setBidForms((prevState) => ({
             ...prevState,
             [rfqId]: {
-                carrier_name: '',
-                freight_charges: '',
-                origin_charges: '',
-                destination_charges: '',
-                transit_time: '',
-                quote_validity: '',
                 amount: '',
                 ...prevState[rfqId],
                 [field]: value,
@@ -75,12 +69,9 @@ const SupplierDashboard = () => {
         const form = bidForms[rfqId] || {};
         if (
             !form.amount ||
-            Number(form.amount) <= 0 ||
-            !form.carrier_name ||
-            !form.transit_time ||
-            !form.quote_validity
+            Number(form.amount) <= 0
         ) {
-            alert('Please fill all required bid fields.');
+            alert('Please enter a valid bid amount.');
             return;
         }
 
@@ -92,12 +83,6 @@ const SupplierDashboard = () => {
                 `${API_BASE_URL}/supplier/bid`,
                 {
                     rfq_id: rfqId,
-                    carrier_name: form.carrier_name,
-                    freight_charges: Number(form.freight_charges || 0),
-                    origin_charges: Number(form.origin_charges || 0),
-                    destination_charges: Number(form.destination_charges || 0),
-                    transit_time: form.transit_time,
-                    quote_validity: form.quote_validity,
                     amount: Number(form.amount),
                 },
                 {
@@ -148,6 +133,10 @@ const SupplierDashboard = () => {
                                     <span className="value highlight">₹{rfq.lowest_bid || 'N/A'}</span>
                                 </div>
                                 <div className="info-item">
+                                    <span className="label">Quotation Amount</span>
+                                    <span className="value highlight">₹{rfq.quotation_price || 'N/A'}</span>
+                                </div>
+                                <div className="info-item">
                                     <span className="label">Closing Time</span>
                                     <span className="value">
                                         {new Date(rfq.bid_close_time).toLocaleString()}
@@ -156,12 +145,6 @@ const SupplierDashboard = () => {
                             </div>
 
                             <div className="bid-action-area">
-                                <input
-                                    placeholder="Carrier Name"
-                                    value={bidForms[rfq.id]?.carrier_name || ''}
-                                    onChange={(e) => handleBidChange(rfq.id, 'carrier_name', e.target.value)}
-                                    className="bid-input"
-                                />
                                 <div className="input-with-currency">
                                     <span className="currency-symbol">₹</span>
                                     <input
@@ -172,39 +155,6 @@ const SupplierDashboard = () => {
                                         className="bid-input"
                                     />
                                 </div>
-                                <input
-                                    type="number"
-                                    placeholder="Freight Charges"
-                                    value={bidForms[rfq.id]?.freight_charges || ''}
-                                    onChange={(e) => handleBidChange(rfq.id, 'freight_charges', e.target.value)}
-                                    className="bid-input"
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Origin Charges"
-                                    value={bidForms[rfq.id]?.origin_charges || ''}
-                                    onChange={(e) => handleBidChange(rfq.id, 'origin_charges', e.target.value)}
-                                    className="bid-input"
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Destination Charges"
-                                    value={bidForms[rfq.id]?.destination_charges || ''}
-                                    onChange={(e) => handleBidChange(rfq.id, 'destination_charges', e.target.value)}
-                                    className="bid-input"
-                                />
-                                <input
-                                    placeholder="Transit Time"
-                                    value={bidForms[rfq.id]?.transit_time || ''}
-                                    onChange={(e) => handleBidChange(rfq.id, 'transit_time', e.target.value)}
-                                    className="bid-input"
-                                />
-                                <input
-                                    type="date"
-                                    value={bidForms[rfq.id]?.quote_validity || ''}
-                                    onChange={(e) => handleBidChange(rfq.id, 'quote_validity', e.target.value)}
-                                    className="bid-input"
-                                />
                                 <button 
                                     onClick={() => placeBid(rfq.id)}
                                     disabled={placingBid === rfq.id}

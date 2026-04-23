@@ -62,6 +62,25 @@ const ViewRFQs = () => {
         }
     };
 
+    const deleteRFQ = async (rfqId) => {
+        const shouldDelete = window.confirm('Are you sure you want to delete this RFQ?');
+        if (!shouldDelete) return;
+
+        try {
+            const token = Cookies.get('token');
+            await axios.delete(`${API_BASE_URL}/rfq/${rfqId}`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (selectedRfq?.id === rfqId) {
+                setSelectedRfq(null);
+            }
+            fetchRFQs();
+            alert('RFQ deleted successfully');
+        } catch (err) {
+            alert(err.response?.data?.message || 'Unable to delete RFQ');
+        }
+    };
+
     if (loading) return <div className="view-status">Fetching active RFQs...</div>;
     if (error) return <div className="view-status error">{error}</div>;
 
@@ -93,6 +112,10 @@ const ViewRFQs = () => {
                                     <span className="value price">₹{rfq.lowest_bid || '0'}</span>
                                 </div>
                                 <div className="detail-item">
+                                    <span className="label">Quotation Amount</span>
+                                    <span className="value price">₹{rfq.quotation_price || '0'}</span>
+                                </div>
+                                <div className="detail-item">
                                     <span className="label">Closes At</span>
                                     <span className="value date">
                                         {new Date(rfq.bid_close_time).toLocaleString()}
@@ -111,6 +134,7 @@ const ViewRFQs = () => {
                             </div>
                             <div className="card-actions">
                                 <button className="view-details-btn" onClick={() => fetchRFQDetails(rfq.id)}>View Details</button>
+                                <button className="refresh-btn" onClick={() => deleteRFQ(rfq.id)}>Delete RFQ</button>
                             </div>
                         </div>
                     ))}
@@ -124,6 +148,7 @@ const ViewRFQs = () => {
                         <button className="refresh-btn" onClick={() => setSelectedRfq(null)}>Close</button>
                     </div>
                     <h4 className="rfq-name">{selectedRfq.rfq_name}</h4>
+                    <p>Quotation Amount: ₹{selectedRfq.quotation_price || '0'}</p>
                     <p>Trigger Window: {selectedRfq.trigger_window_minutes} mins | Extension: {selectedRfq.extension_duration_minutes} mins</p>
                     <p>Trigger Rule: {selectedRfq.extension_trigger}</p>
                     <h4>Bids (Lowest first)</h4>
